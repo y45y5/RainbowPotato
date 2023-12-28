@@ -1,0 +1,2 @@
+# RainbowPotato
+Discord Bot
