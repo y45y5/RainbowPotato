@@ -7,9 +7,9 @@ namespace RainbowPotato.Dao
     internal interface IDao<T> where T : IMongoModel
     {
         MongoClient GetMongoClient();
-        IMongoCollection<BsonDocument> GetCollection();
-        T? GetOneResultFromDatabase(ulong guildId);
-        List<T> GetAllResultsFromDatabase();
-        Task InsertCleanRecordIntoDatabaseAsync(ulong guildId);
+        IMongoCollection<BsonDocument> GetCollection(string collectionName);
+        T? GetResultFromDatabase(string cacheKey);
+        List<T> GetResultsFromDatabase(string cacheKey);
+        Task<T> AddCleanRecordToDatabase(string cacheKey);
     }
 }

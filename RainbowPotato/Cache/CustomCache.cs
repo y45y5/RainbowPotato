@@ -6,12 +6,15 @@ namespace RainbowPotato.Cache
 {
     internal class CustomCache<T> : ICustomCache<T> where T : IMongoModel
     {
-        private MemoryCache memoryCache = MemoryCache.Default;
+        private readonly MemoryCache memoryCache = MemoryCache.Default;
 
-        public void AddIntoCache(T model, string cacheKey)
+        public void AddToCache(T model, string cacheKey)
         {
-            CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
-            cacheItemPolicy.SlidingExpiration = TimeSpan.FromMinutes(10);
+            CacheItemPolicy cacheItemPolicy = new CacheItemPolicy
+            {
+                SlidingExpiration = TimeSpan.FromMinutes(10)
+            };
+
             memoryCache.Add(cacheKey, model, cacheItemPolicy);
         }
 

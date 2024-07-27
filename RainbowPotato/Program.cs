@@ -5,6 +5,8 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using RainbowPotato.Cache;
+using RainbowPotato.Dao;
 using RainbowPotato.Model;
 using RainbowPotato.Module;
 using RainbowPotato.Repositories;
@@ -13,7 +15,7 @@ namespace RainbowPotato
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             BotSetUpAsync().GetAwaiter().GetResult();
         }
@@ -22,31 +24,33 @@ namespace RainbowPotato
         {
             DiscordClient discordClient = new DiscordClient(new DiscordConfiguration()
             {
-                Token = Variables.botToken,
+                Token = Settings.botToken,
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.All
             });
 
+            IServiceCollection services = new ServiceCollection();
+            ConfigureRepositories(services);
+
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+
             CommandsNextExtension commandsNextConfiguration = discordClient.UseCommandsNext(new CommandsNextConfiguration()
             {
-                StringPrefixes = new[] { ">" }
+                StringPrefixes = new[] { ">" },
+                Services = serviceProvider
             });
 
-            discordClient.UseInteractivity(new InteractivityConfiguration()
-            {
-                PollBehaviour = PollBehaviour.KeepEmojis,
-                Timeout = TimeSpan.FromSeconds(30)
-            });
-
-            // Register Repositories as singletons in ServiceCollection object
-            IServiceCollection services = new ServiceCollection();
-            services.AddSingleton<IMongoRepository<GuildConfigModel>, MongoRepository<GuildConfigModel>>();
-
-            // Register commands modules
             commandsNextConfiguration.RegisterCommands<StatisticsModule>();
 
-            await discordClient.ConnectAsync(new DiscordActivity("Ziemniak, a nawet batat....", ActivityType.Playing));
+            await discordClient.ConnectAsync(new DiscordActivity("Ziemniak, a nawet batat", ActivityType.Playing));
             await Task.Delay(-1);
+        }
+
+        public static void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddSingleton<IDao<GuildConfigModel>, Dao<GuildConfigModel>>();
+            services.AddSingleton<ICustomCache<GuildConfigModel>, CustomCache<GuildConfigModel>>();
+            services.AddSingleton<IMongoRepository<GuildConfigModel>, MongoRepository<GuildConfigModel>>();
         }
     }
 }
