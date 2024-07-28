@@ -1,14 +1,13 @@
 ﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
-using DSharpPlus.Interactivity.Enums;
-using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.DependencyInjection;
 using RainbowPotato.Cache;
 using RainbowPotato.Dao;
 using RainbowPotato.Model;
-using RainbowPotato.Module;
+using RainbowPotato.Modules.Commands;
+using RainbowPotato.Modules.Slash;
 using RainbowPotato.Repositories;
 
 namespace RainbowPotato
@@ -31,7 +30,6 @@ namespace RainbowPotato
 
             IServiceCollection services = new ServiceCollection();
             ConfigureRepositories(services);
-
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             CommandsNextExtension commandsNextConfiguration = discordClient.UseCommandsNext(new CommandsNextConfiguration()
@@ -40,7 +38,10 @@ namespace RainbowPotato
                 Services = serviceProvider
             });
 
-            commandsNextConfiguration.RegisterCommands<StatisticsModule>();
+            SlashCommandsExtension slashCommands = discordClient.UseSlashCommands();
+            slashCommands.RegisterCommands<ServerInfoModuleSlash>();
+
+            commandsNextConfiguration.RegisterCommands<ServerInfoModuleCommands>();
 
             await discordClient.ConnectAsync(new DiscordActivity("Ziemniak, a nawet batat", ActivityType.Playing));
             await Task.Delay(-1);

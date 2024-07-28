@@ -12,6 +12,8 @@ namespace RainbowPotato.Cache
         {
             CacheItemPolicy cacheItemPolicy = new CacheItemPolicy
             {
+                // maybe it shouldn't be sliding expiration? there is an option where some configs will not be updated for a VERY long time
+                // TODO think about it, changing expiration method will probably cause more database calls
                 SlidingExpiration = TimeSpan.FromMinutes(10)
             };
 
