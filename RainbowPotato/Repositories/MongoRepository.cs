@@ -7,32 +7,42 @@ namespace RainbowPotato.Repositories
 {
     internal class MongoRepository<T> : IMongoRepository<T> where T : IMongoModel
     {
-        private readonly IDao<T> mongoDao;
-        private readonly ICustomCache<T> customCache;
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+
+        private readonly IDao<T> _mongoDao;
+        private readonly ICustomCache<T> _customCache;
 
         public MongoRepository(IDao<T> mongoDao, ICustomCache<T> customCache)
         {
-            this.mongoDao = mongoDao;
-            this.customCache = customCache;
+            _mongoDao = mongoDao;
+            _customCache = customCache;
         }
 
-        // Return the model for a given cache key. Repo first searches the cache, 
-        // if the model isn't there, it sends a query to the database, 
-        // if it isn't in the database either, it creates a new, empty model and puts it in the database, then adds it to the cache.
+        // Return the model for a given cache key.
 
-        // If you spam some commands right after bot launch, it will create multiple clean models and insert all of them into the databse, TODO how to fix it????? good enough for now
+        // 1. Check semaphore
+        // 2. Try to get config from cache, if in cache - return
+        // 3. Try to get config from database, if in database - insert into cache and return
+        // 4. Try to add new clean config into database - insert into cache and return
+        // Release semaphore at the end
         public async Task<T> GetResults(string cacheKey)
         {
+            await _semaphore.WaitAsync();
+
             try
             {
-                return customCache.GetFromCache(cacheKey);
+                return _customCache.GetFromCache(cacheKey);
             }
             catch (NotInCacheException)
             {
-                T? result = mongoDao.GetResultFromDatabase(cacheKey);
-                result ??= await mongoDao.AddCleanRecordToDatabase(cacheKey);
-                customCache.AddToCache(result, cacheKey);
+                T? result = _mongoDao.GetResultFromDatabase(cacheKey);
+                result ??= await _mongoDao.AddCleanRecordToDatabase(cacheKey);
+                _customCache.AddToCache(result, cacheKey);
                 return result;
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
     }

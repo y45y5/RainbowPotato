@@ -1,19 +1,18 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using RainbowPotato.Model;
-using RainbowPotato.Module.ModuleLogic;
 using RainbowPotato.Repositories;
 
-namespace RainbowPotato.Modules.Commands
+namespace RainbowPotato.Modules.ServerInfo
 {
     internal class ServerInfoModuleCommands : BaseCommandModule
     {
-        private readonly IMongoRepository<GuildConfigModel> guildConfigRepository;
+        private readonly IMongoRepository<GuildConfigModel> _guildConfigRepository;
         private readonly ServerInfoModuleLogic statisticsModuleLogic = new();
 
         public ServerInfoModuleCommands(IMongoRepository<GuildConfigModel> guildConfigRepository)
         {
-            this.guildConfigRepository = guildConfigRepository;
+            _guildConfigRepository = guildConfigRepository;
         }
 
         [Command("info")]

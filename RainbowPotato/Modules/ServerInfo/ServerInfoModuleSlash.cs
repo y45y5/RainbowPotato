@@ -2,14 +2,13 @@
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using RainbowPotato.Model;
-using RainbowPotato.Module.ModuleLogic;
 using RainbowPotato.Repositories;
 
-namespace RainbowPotato.Modules.Slash
+namespace RainbowPotato.Modules.ServerInfo
 {
     internal class ServerInfoModuleSlash : ApplicationCommandModule
     {
-        private readonly IMongoRepository<GuildConfigModel> guildConfigRepository;
+        private readonly IMongoRepository<GuildConfigModel> _guildConfigRepository;
         private readonly ServerInfoModuleLogic statisticsModuleLogic = new();
 
         [SlashCommand("info", "Get some server info")]

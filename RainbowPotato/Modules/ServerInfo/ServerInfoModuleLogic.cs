@@ -1,7 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 
-namespace RainbowPotato.Module.ModuleLogic
+namespace RainbowPotato.Modules.ServerInfo
 {
     internal class ServerInfoModuleLogic
     {

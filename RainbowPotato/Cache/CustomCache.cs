@@ -6,7 +6,7 @@ namespace RainbowPotato.Cache
 {
     internal class CustomCache<T> : ICustomCache<T> where T : IMongoModel
     {
-        private readonly MemoryCache memoryCache = MemoryCache.Default;
+        private readonly MemoryCache _memoryCache = MemoryCache.Default;
 
         public void AddToCache(T model, string cacheKey)
         {
@@ -17,19 +17,19 @@ namespace RainbowPotato.Cache
                 SlidingExpiration = TimeSpan.FromMinutes(10)
             };
 
-            memoryCache.Add(cacheKey, model, cacheItemPolicy);
+            _memoryCache.Add(cacheKey, model, cacheItemPolicy);
         }
 
         public void RemoveFromCache(string cacheKey)
         {
-            memoryCache.Remove(cacheKey);
+            _memoryCache.Remove(cacheKey);
         }
 
         public T GetFromCache(string cacheKey)
         {
-            if (memoryCache.Contains(cacheKey))
+            if (_memoryCache.Contains(cacheKey))
             {
-                return (T)memoryCache.Get(cacheKey);
+                return (T)_memoryCache.Get(cacheKey);
             }
 
             throw new NotInCacheException();

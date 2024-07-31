@@ -6,8 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RainbowPotato.Cache;
 using RainbowPotato.Dao;
 using RainbowPotato.Model;
-using RainbowPotato.Modules.Commands;
-using RainbowPotato.Modules.Slash;
+using RainbowPotato.Modules.ServerInfo;
 using RainbowPotato.Repositories;
 
 namespace RainbowPotato
