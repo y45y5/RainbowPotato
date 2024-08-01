@@ -5,5 +5,6 @@ namespace RainbowPotato.Repositories
     internal interface IMongoRepository<T> where T : IMongoModel
     {
         Task<T> GetResults(string cacheKey);
+        void ClearCache();
     }
 }

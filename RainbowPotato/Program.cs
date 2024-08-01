@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RainbowPotato.Cache;
 using RainbowPotato.Dao;
 using RainbowPotato.Model;
+using RainbowPotato.Modules.AdminTools;
 using RainbowPotato.Modules.ServerInfo;
 using RainbowPotato.Repositories;
 
@@ -28,7 +29,7 @@ namespace RainbowPotato
             });
 
             IServiceCollection services = new ServiceCollection();
-            ConfigureRepositories(services);
+            ConfigureServices(services);
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             CommandsNextExtension commandsNextConfiguration = discordClient.UseCommandsNext(new CommandsNextConfiguration()
@@ -37,20 +38,26 @@ namespace RainbowPotato
                 Services = serviceProvider
             });
 
-            SlashCommandsExtension slashCommands = discordClient.UseSlashCommands();
-            slashCommands.RegisterCommands<ServerInfoModuleSlash>();
-
             commandsNextConfiguration.RegisterCommands<ServerInfoModuleCommands>();
+
+            SlashCommandsExtension slashCommands = discordClient.UseSlashCommands(new SlashCommandsConfiguration(){
+                Services = serviceProvider
+            });
+
+            slashCommands.RegisterCommands<ServerInfoModuleSlash>();
 
             await discordClient.ConnectAsync(new DiscordActivity("Ziemniak, a nawet batat", ActivityType.Playing));
             await Task.Delay(-1);
         }
 
-        public static void ConfigureRepositories(IServiceCollection services)
+        public static void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IDao<GuildConfigModel>, Dao<GuildConfigModel>>();
             services.AddSingleton<ICustomCache<GuildConfigModel>, CustomCache<GuildConfigModel>>();
             services.AddSingleton<IMongoRepository<GuildConfigModel>, MongoRepository<GuildConfigModel>>();
+
+            services.AddSingleton<ServerInfoModuleLogic>();
+            services.AddSingleton<AdminToolsModuleLogic>();
         }
     }
 }

@@ -11,5 +11,10 @@
         {
             return cacheKey[..cacheKey.IndexOf("#")];
         }
+
+        public static bool IsDeveloper(ulong memberId)
+        {
+            return memberId == 412611817425207307;
+        }
     }
 }

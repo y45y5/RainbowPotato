@@ -34,5 +34,15 @@ namespace RainbowPotato.Cache
 
             throw new NotInCacheException();
         }
+
+        public void Clear()
+        {
+            List<KeyValuePair<string, object>> memoryCache = _memoryCache.ToList();
+
+            foreach (KeyValuePair<string, object> pair in memoryCache)
+            {
+                RemoveFromCache(pair.Key);
+            }
+        }
     }
 }

@@ -7,5 +7,6 @@ namespace RainbowPotato.Cache
         T GetFromCache(string cacheKey);
         void AddToCache(T model, string cacheKey);
         void RemoveFromCache(string cacheKey);
+        void Clear();
     }
 }

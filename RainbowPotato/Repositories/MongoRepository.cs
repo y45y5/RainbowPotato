@@ -45,5 +45,19 @@ namespace RainbowPotato.Repositories
                 _semaphore.Release();
             }
         }
+
+        public async void ClearCache()
+        {
+            await _semaphore.WaitAsync();
+
+            try
+            {
+                _customCache.Clear();
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
     }
 }

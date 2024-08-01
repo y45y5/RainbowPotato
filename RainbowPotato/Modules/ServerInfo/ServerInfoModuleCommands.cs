@@ -1,28 +1,21 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using RainbowPotato.Model;
-using RainbowPotato.Repositories;
 
 namespace RainbowPotato.Modules.ServerInfo
 {
     internal class ServerInfoModuleCommands : BaseCommandModule
     {
-        private readonly IMongoRepository<GuildConfigModel> _guildConfigRepository;
-        private readonly ServerInfoModuleLogic statisticsModuleLogic = new();
+        private readonly ServerInfoModuleLogic _serverInfoModuleLogic;
 
-        public ServerInfoModuleCommands(IMongoRepository<GuildConfigModel> guildConfigRepository)
+        public ServerInfoModuleCommands(ServerInfoModuleLogic serverInfoModuleLogic)
         {
-            _guildConfigRepository = guildConfigRepository;
+            _serverInfoModuleLogic = serverInfoModuleLogic;
         }
 
-        [Command("info")]
-        [RequireGuild]
-        [Hidden]
+        [Command("info"), RequireGuild, Hidden]
         public async Task SendGuildStatistics(CommandContext ctx)
         {
-            //GuildConfigModel guildConfig = await guildConfigRepository.GetResults($"GuildConfig#{ctx.Guild.Id}");
-
-            await ctx.RespondAsync(statisticsModuleLogic.GetServerInformation(ctx.Guild));
+            await ctx.RespondAsync(_serverInfoModuleLogic.GetServerInformation(ctx.Guild));
         }
     }
 }

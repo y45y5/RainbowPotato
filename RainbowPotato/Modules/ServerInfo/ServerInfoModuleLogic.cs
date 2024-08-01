@@ -1,10 +1,21 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
+using RainbowPotato.Model;
+using RainbowPotato.Repositories;
 
 namespace RainbowPotato.Modules.ServerInfo
 {
     internal class ServerInfoModuleLogic
     {
+        private readonly IMongoRepository<GuildConfigModel> _guildConfigRepository;
+
+        public ServerInfoModuleLogic(IMongoRepository<GuildConfigModel> guildConfigRepository)
+        {
+            _guildConfigRepository = guildConfigRepository;
+
+            //GuildConfigModel guildConfig = await _guildConfigRepository.GetResults($"GuildConfig#{guild.Id}");
+        }
+
         public DiscordEmbed GetServerInformation(DiscordGuild guild)
         {
             IReadOnlyCollection<DiscordChannel> allChannels = guild.GetChannelsAsync().Result;
