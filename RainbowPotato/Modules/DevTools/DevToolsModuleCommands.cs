@@ -3,17 +3,17 @@ using DSharpPlus.CommandsNext.Attributes;
 
 namespace RainbowPotato.Modules.AdminTools
 {
-    internal class AdminToolsModuleCommands
+    internal class DevToolsModuleCommands : BaseCommandModule
     {
-        private readonly AdminToolsModuleLogic _adminToolsLogic;
+        private readonly DevToolsModuleLogic _adminToolsLogic;
 
-        public AdminToolsModuleCommands(AdminToolsModuleLogic adminToolsLogic) 
+        public DevToolsModuleCommands(DevToolsModuleLogic adminToolsLogic)
         {
             _adminToolsLogic = adminToolsLogic;
         }
 
         [Command("clearcache"), Hidden]
-        public void ClearCache(CommandContext ctx)
+        public async Task ClearCache(CommandContext ctx)
         {
             _adminToolsLogic.ClearCache(ctx.User.Id);
         }

@@ -5,18 +5,18 @@ using RainbowPotato.Repositories;
 
 namespace RainbowPotato.Modules.ServerInfo
 {
-    internal class ServerInfoModuleLogic
+    internal class GuildInfoModuleLogic
     {
         private readonly IMongoRepository<GuildConfigModel> _guildConfigRepository;
 
-        public ServerInfoModuleLogic(IMongoRepository<GuildConfigModel> guildConfigRepository)
+        public GuildInfoModuleLogic(IMongoRepository<GuildConfigModel> guildConfigRepository)
         {
             _guildConfigRepository = guildConfigRepository;
 
             //GuildConfigModel guildConfig = await _guildConfigRepository.GetResults($"GuildConfig#{guild.Id}");
         }
 
-        public DiscordEmbed GetServerInformation(DiscordGuild guild)
+        public DiscordEmbed GenerateGuildInfoEmbed(DiscordGuild guild)
         {
             IReadOnlyCollection<DiscordChannel> allChannels = guild.GetChannelsAsync().Result;
             int categoriesChannels = allChannels.Where(channel => channel.IsCategory).Count();
@@ -46,6 +46,15 @@ namespace RainbowPotato.Modules.ServerInfo
             embedBuilder.AddField("Server roles", $"```all:{allRoles.Count} admin:{adminRoles}```", false);
             embedBuilder.AddField("Server created on (MM/DD/YYYY)", $"```{guild.CreationTimestamp.ToString("MM/dd/yyyy HH:mm")}```", false);
             embedBuilder.SetThumbnail(guild.IconUrl);
+
+            return embedBuilder.Build();
+        }
+
+        public DiscordEmbed GenerateGuildNotFoundEmbed(DiscordClient client, ulong guildId)
+        {
+            EmbedBuilder embedBuilder = new();
+            embedBuilder.AddField("What are you looking for?", $"```Server ID#{guildId} not found```", true);
+            embedBuilder.SetThumbnail(client.CurrentUser.AvatarUrl);
 
             return embedBuilder.Build();
         }

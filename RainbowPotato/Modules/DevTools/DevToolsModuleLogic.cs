@@ -3,18 +3,19 @@ using RainbowPotato.Repositories;
 
 namespace RainbowPotato.Modules.AdminTools
 {
-    internal class AdminToolsModuleLogic
+    internal class DevToolsModuleLogic
     {
         private readonly IMongoRepository<GuildConfigModel> _guildConfigRepository;
 
-        public AdminToolsModuleLogic(IMongoRepository<GuildConfigModel> guildConfigRepository)
+        public DevToolsModuleLogic(IMongoRepository<GuildConfigModel> guildConfigRepository)
         {
             _guildConfigRepository = guildConfigRepository;
         }
 
         public void ClearCache(ulong memberId)
         {
-            if (!Tools.IsDeveloper(memberId)){
+            if (!Tools.IsDeveloper(memberId))
+            {
                 return;
             }
 

@@ -38,13 +38,14 @@ namespace RainbowPotato
                 Services = serviceProvider
             });
 
-            commandsNextConfiguration.RegisterCommands<ServerInfoModuleCommands>();
+            commandsNextConfiguration.RegisterCommands<DevToolsModuleCommands>();
+            commandsNextConfiguration.RegisterCommands<GuildInfoModuleCommands>();
 
             SlashCommandsExtension slashCommands = discordClient.UseSlashCommands(new SlashCommandsConfiguration(){
                 Services = serviceProvider
             });
 
-            slashCommands.RegisterCommands<ServerInfoModuleSlash>();
+            slashCommands.RegisterCommands<GuildInfoModuleSlash>();
 
             await discordClient.ConnectAsync(new DiscordActivity("Ziemniak, a nawet batat", ActivityType.Playing));
             await Task.Delay(-1);
@@ -56,8 +57,8 @@ namespace RainbowPotato
             services.AddSingleton<ICustomCache<GuildConfigModel>, CustomCache<GuildConfigModel>>();
             services.AddSingleton<IMongoRepository<GuildConfigModel>, MongoRepository<GuildConfigModel>>();
 
-            services.AddSingleton<ServerInfoModuleLogic>();
-            services.AddSingleton<AdminToolsModuleLogic>();
+            services.AddSingleton<DevToolsModuleLogic>();
+            services.AddSingleton<GuildInfoModuleLogic>();
         }
     }
 }
