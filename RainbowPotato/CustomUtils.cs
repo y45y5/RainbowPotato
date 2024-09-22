@@ -1,4 +1,7 @@
-﻿namespace RainbowPotato
+﻿using DSharpPlus;
+using DSharpPlus.Entities;
+
+namespace RainbowPotato
 {
     internal static class CustomUtils
     {
@@ -26,6 +29,26 @@
             }
 
             return String.Empty;
+        }
+
+        public async static void AddProcessingReaction(DiscordClient client, DiscordMessage message)
+        {
+            await message.CreateReactionAsync(DiscordEmoji.FromName(client, ":RPProcessing:"));
+        }
+
+        public async static void AddSuccessReaction(DiscordClient client, DiscordMessage message)
+        {
+            await message.CreateReactionAsync(DiscordEmoji.FromName(client, ":RPSuccess:"));
+        }
+
+        public async static void AddFailedReaction(DiscordClient client, DiscordMessage message)
+        {
+            await message.CreateReactionAsync(DiscordEmoji.FromName(client, ":RPFailed:"));
+        }
+
+        public async static void ClearAllReactions(DiscordMessage message)
+        {
+            await message.DeleteAllReactionsAsync();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Entities;
 
 namespace RainbowPotato.Modules.AdminTools
 {
@@ -18,7 +17,7 @@ namespace RainbowPotato.Modules.AdminTools
         {
             _adminToolsLogic.ClearCache(ctx.User.Id);
 
-            await ctx.Message.CreateReactionAsync(DiscordEmoji.FromName(ctx.Client, ":white_check_mark:"));
+            CustomUtils.AddSuccessReaction(ctx.Client, ctx.Message);
         }
     }
 }
