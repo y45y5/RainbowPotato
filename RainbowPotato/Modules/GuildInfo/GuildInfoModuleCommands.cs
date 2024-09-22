@@ -3,7 +3,7 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using System;
 
-namespace RainbowPotato.Modules.ServerInfo
+namespace RainbowPotato.Modules.GuildInfo
 {
     internal class GuildInfoModuleCommands : BaseCommandModule
     {

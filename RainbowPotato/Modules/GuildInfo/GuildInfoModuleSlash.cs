@@ -4,7 +4,7 @@ using DSharpPlus.SlashCommands;
 using ZstdSharp.Unsafe;
 using static MongoDB.Bson.Serialization.Serializers.SerializerHelper;
 
-namespace RainbowPotato.Modules.ServerInfo
+namespace RainbowPotato.Modules.GuildInfo
 {
     internal class GuildInfoModuleSlash : ApplicationCommandModule
     {
@@ -16,11 +16,10 @@ namespace RainbowPotato.Modules.ServerInfo
         }
 
         [SlashCommand("info", "General server info"), RequireGuild]
-        public async Task SendGuildInformation(InteractionContext ctx, [Option("test", "ID")] string guildId = "0")
+        public async Task SendGuildInformation(InteractionContext ctx, [Option("Server", "ID")] string guildId = "0")
         {
             DiscordEmbed _embed;
-            ulong _guildId;
-            ulong.TryParse(guildId, out _guildId);
+            ulong.TryParse(guildId, out ulong _guildId);
 
             if (ctx.Client.Guilds.ContainsKey(_guildId))
             {

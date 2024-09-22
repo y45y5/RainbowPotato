@@ -7,7 +7,7 @@ using RainbowPotato.Cache;
 using RainbowPotato.Dao;
 using RainbowPotato.Model;
 using RainbowPotato.Modules.AdminTools;
-using RainbowPotato.Modules.ServerInfo;
+using RainbowPotato.Modules.GuildInfo;
 using RainbowPotato.Repositories;
 
 namespace RainbowPotato
@@ -21,6 +21,19 @@ namespace RainbowPotato
 
         static async Task BotSetUpAsync()
         {
+            bool dev = true;
+
+            if (dev)
+            {
+                Settings.botToken = CustomUtils.ReadToken("B:/VisualProjects/RainbowPotatoToken.txt");
+                Settings.mongoClientString = CustomUtils.ReadToken("B:/VisualProjects/MongoAccess.txt");
+            }
+            else
+            {
+                Settings.botToken = CustomUtils.ReadToken("/home/ec2-user/RainbowPotatoToken.txt");
+                Settings.mongoClientString = CustomUtils.ReadToken("/home/ec2-user/MongoAccess.txt");
+            }
+
             DiscordClient discordClient = new DiscordClient(new DiscordConfiguration()
             {
                 Token = Settings.botToken,
@@ -34,7 +47,7 @@ namespace RainbowPotato
 
             CommandsNextExtension commandsNextConfiguration = discordClient.UseCommandsNext(new CommandsNextConfiguration()
             {
-                StringPrefixes = new[] { ">" },
+                StringPrefixes = new[] { "!" },
                 Services = serviceProvider
             });
 

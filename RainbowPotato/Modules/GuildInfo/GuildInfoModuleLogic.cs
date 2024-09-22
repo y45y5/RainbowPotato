@@ -3,7 +3,7 @@ using DSharpPlus.Entities;
 using RainbowPotato.Model;
 using RainbowPotato.Repositories;
 
-namespace RainbowPotato.Modules.ServerInfo
+namespace RainbowPotato.Modules.GuildInfo
 {
     internal class GuildInfoModuleLogic
     {

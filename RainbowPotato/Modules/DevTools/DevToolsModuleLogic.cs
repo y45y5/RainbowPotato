@@ -14,7 +14,7 @@ namespace RainbowPotato.Modules.AdminTools
 
         public void ClearCache(ulong memberId)
         {
-            if (!Tools.IsDeveloper(memberId))
+            if (!CustomUtils.IsDeveloper(memberId))
             {
                 return;
             }

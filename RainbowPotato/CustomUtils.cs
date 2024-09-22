@@ -1,6 +1,6 @@
 ﻿namespace RainbowPotato
 {
-    internal static class Tools
+    internal static class CustomUtils
     {
         public static ulong GetGuildIdFromCacheKey(string cacheKey)
         {
@@ -15,6 +15,17 @@
         public static bool IsDeveloper(ulong memberId)
         {
             return memberId == 412611817425207307;
+        }
+
+        public static string ReadToken(string path)
+        {
+            IEnumerable<string> lines = File.ReadLines(path);
+            foreach (string line in lines)
+            {
+                return line;
+            }
+
+            return String.Empty;
         }
     }
 }

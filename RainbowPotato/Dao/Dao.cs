@@ -22,8 +22,8 @@ namespace RainbowPotato.Dao
 
         public T? GetResultFromDatabase(string cacheKey)
         {
-            IMongoCollection<BsonDocument> collection = GetCollection(Tools.GetCollectionNameFromCacheKey(cacheKey));
-            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("guildId", Tools.GetGuildIdFromCacheKey(cacheKey));
+            IMongoCollection<BsonDocument> collection = GetCollection(CustomUtils.GetCollectionNameFromCacheKey(cacheKey));
+            FilterDefinition<BsonDocument> filter = Builders<BsonDocument>.Filter.Eq("guildId", CustomUtils.GetGuildIdFromCacheKey(cacheKey));
             BsonDocument bsonDocument = collection.Find(filter).FirstOrDefault();
 
             if (bsonDocument == null)
@@ -37,7 +37,7 @@ namespace RainbowPotato.Dao
 
         public List<T> GetResultsFromDatabase(string cacheKey)
         {
-            IMongoCollection<BsonDocument> collection = GetCollection(Tools.GetCollectionNameFromCacheKey(cacheKey));
+            IMongoCollection<BsonDocument> collection = GetCollection(CustomUtils.GetCollectionNameFromCacheKey(cacheKey));
             List<BsonDocument> bsonDocuments = collection.Find(_ => true).ToList();
             List<T> results = new();
             bsonDocuments.ForEach(x => results.Add(BsonSerializer.Deserialize<T>(x)));
@@ -46,15 +46,15 @@ namespace RainbowPotato.Dao
 
         public async Task<T> AddCleanRecordToDatabase(string cacheKey)
         {
-            IMongoCollection<BsonDocument> collection = GetCollection(Tools.GetCollectionNameFromCacheKey(cacheKey));
-            T? cleanModel = (T?)Activator.CreateInstance(typeof(T), Tools.GetGuildIdFromCacheKey(cacheKey));
+            IMongoCollection<BsonDocument> collection = GetCollection(CustomUtils.GetCollectionNameFromCacheKey(cacheKey));
+            T? cleanModel = (T?)Activator.CreateInstance(typeof(T), CustomUtils.GetGuildIdFromCacheKey(cacheKey));
 
             if (cleanModel == null)
             {
                 throw new InvalidOperationException($"Cannot create an instance of {typeof(T)}.");
             }
 
-            cleanModel.guildId = Tools.GetGuildIdFromCacheKey(cacheKey);
+            cleanModel.guildId = CustomUtils.GetGuildIdFromCacheKey(cacheKey);
             await collection.InsertOneAsync(cleanModel.ToBsonDocument());
             return cleanModel;
         }
