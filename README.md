@@ -1,3 +1,3 @@
-#Rainbow Potato
+## Rainbow Potato
 
-For detailed information about the structure and flow of DAO, Cache and Repository classes, refer to the [About Database Communication](./About Database Communication.md).
+For detailed information about the structure and flow of DAO, Cache and Repository classes, refer to the [About Database Communication](./AboutDatabaseCommunication.md).
