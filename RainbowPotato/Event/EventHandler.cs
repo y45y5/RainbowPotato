@@ -8,24 +8,18 @@ namespace RainbowPotato.Event
 {
     internal class EventHandler
     {
-        public DiscordClient AddEventHandlers(DiscordClient client, IServiceCollection services)
+        public DiscordClient AddEventHandlers(DiscordClient client, IServiceProvider serviceProvider)
         {
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
             ISimpleMongoRepository<ImgurAlbumTriggerModel> imgurMongoRepository = serviceProvider.GetService<ISimpleMongoRepository<ImgurAlbumTriggerModel>>();
 
             ImgurModuleEvents imgurModuleEvents = new ImgurModuleEvents(imgurMongoRepository);
 
-            client.MessageCreated += (client, @event) =>
+            client.MessageCreated += async (client, @event) =>
             {
-                _ = Task.Run((Func<Task>)(async () =>
+                if (!@event.Author.IsBot && @event.Channel.Guild != null)
                 {
-                    if (!@event.Author.IsBot && @event.Channel.Guild != null)
-                    {
-                        imgurModuleEvents.CheckForImgurTriggers(@event);
-                    }
-                }));
-
-                return Task.CompletedTask;
+                    imgurModuleEvents.CheckForImgurTriggers(@event);
+                }
             };
 
             return client;

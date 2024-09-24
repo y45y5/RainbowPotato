@@ -8,7 +8,6 @@ using RainbowPotato.Dao;
 using RainbowPotato.Model;
 using RainbowPotato.Modules.AdminTools;
 using RainbowPotato.Modules.GuildInfo;
-using RainbowPotato.Modules.Imgur;
 using RainbowPotato.Repositories;
 
 namespace RainbowPotato
@@ -52,7 +51,6 @@ namespace RainbowPotato
             ConfigureServices(services);
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-
             // Commands configuration
 
             CommandsNextExtension commandsNextConfiguration = discordClient.UseCommandsNext(new CommandsNextConfiguration()
@@ -75,7 +73,7 @@ namespace RainbowPotato
             // Add event handlers
 
             Event.EventHandler eventHandler = new Event.EventHandler();
-            discordClient = eventHandler.AddEventHandlers(discordClient, services);
+            discordClient = eventHandler.AddEventHandlers(discordClient, serviceProvider);
 
             await discordClient.ConnectAsync(new DiscordActivity("Ziemniak, a nawet batat", ActivityType.Playing));
             await Task.Delay(-1);
