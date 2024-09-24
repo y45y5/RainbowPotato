@@ -38,6 +38,7 @@ namespace RainbowPotato.Repositories
                 T? result = _mongoDao.GetResultFromDatabase(cacheKey);
                 result ??= await _mongoDao.AddCleanRecordToDatabase(cacheKey);
                 _customCache.AddToCache(result, cacheKey);
+
                 return result;
             }
             finally

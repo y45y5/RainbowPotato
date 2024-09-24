@@ -14,6 +14,7 @@ namespace RainbowPotato.Cache
             {
                 // maybe it shouldn't be sliding expiration? there is an option where some configs will not be updated for a VERY long time
                 // TODO think about it, changing expiration method will probably cause more database calls
+                // maybe it just can update all configs every 15-20 minutes, not a big deal
                 SlidingExpiration = TimeSpan.FromMinutes(10)
             };
 

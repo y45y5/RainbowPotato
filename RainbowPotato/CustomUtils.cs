@@ -33,17 +33,17 @@ namespace RainbowPotato
 
         public async static void AddProcessingReaction(DiscordClient client, DiscordMessage message)
         {
-            await message.CreateReactionAsync(DiscordEmoji.FromName(client, ":RPProcessing:"));
+            await message.CreateReactionAsync(DiscordEmoji.FromName(client, ":Processing:"));
         }
 
         public async static void AddSuccessReaction(DiscordClient client, DiscordMessage message)
         {
-            await message.CreateReactionAsync(DiscordEmoji.FromName(client, ":RPSuccess:"));
+            await message.CreateReactionAsync(DiscordEmoji.FromName(client, ":Success:"));
         }
 
         public async static void AddFailedReaction(DiscordClient client, DiscordMessage message)
         {
-            await message.CreateReactionAsync(DiscordEmoji.FromName(client, ":RPFailed:"));
+            await message.CreateReactionAsync(DiscordEmoji.FromName(client, ":Failed:"));
         }
 
         public async static void ClearAllReactions(DiscordMessage message)

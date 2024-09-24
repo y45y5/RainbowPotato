@@ -17,6 +17,7 @@ namespace RainbowPotato.Dao
             MongoClient mongoClient = GetMongoClient();
             IMongoDatabase database = mongoClient.GetDatabase(Settings.daoDataBaseName);
             IMongoCollection<BsonDocument> collection = database.GetCollection<BsonDocument>(collectionName);
+
             return collection;
         }
 
@@ -32,6 +33,7 @@ namespace RainbowPotato.Dao
             }
 
             T result = BsonSerializer.Deserialize<T>(bsonDocument);
+
             return result;
         }
 
@@ -41,6 +43,7 @@ namespace RainbowPotato.Dao
             List<BsonDocument> bsonDocuments = collection.Find(_ => true).ToList();
             List<T> results = new();
             bsonDocuments.ForEach(x => results.Add(BsonSerializer.Deserialize<T>(x)));
+
             return results;
         }
 
@@ -56,6 +59,7 @@ namespace RainbowPotato.Dao
 
             cleanModel.guildId = CustomUtils.GetGuildIdFromCacheKey(cacheKey);
             await collection.InsertOneAsync(cleanModel.ToBsonDocument());
+
             return cleanModel;
         }
     }

@@ -37,6 +37,16 @@ namespace RainbowPotato
             discordEmbedBuilder.WithThumbnail(url);
         }
 
+        public void AddImage(string url)
+        {
+            discordEmbedBuilder.WithImageUrl(url);
+        }
+
+        public void AddDescription(string content)
+        {
+            discordEmbedBuilder.WithDescription(content);
+        }
+
         public DiscordEmbed Build()
         {
             return discordEmbedBuilder.Build();

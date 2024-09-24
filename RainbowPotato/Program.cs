@@ -8,6 +8,7 @@ using RainbowPotato.Dao;
 using RainbowPotato.Model;
 using RainbowPotato.Modules.AdminTools;
 using RainbowPotato.Modules.GuildInfo;
+using RainbowPotato.Modules.Imgur;
 using RainbowPotato.Repositories;
 
 namespace RainbowPotato
@@ -21,6 +22,8 @@ namespace RainbowPotato
 
         static async Task BotSetUpAsync()
         {
+            // Set correct paths for bot token and mongo access string
+
             bool dev = true;
 
             if (dev)
@@ -34,6 +37,8 @@ namespace RainbowPotato
                 Settings.mongoClientString = CustomUtils.ReadToken("/home/ec2-user/MongoAccess.txt");
             }
 
+            // Discord client settings
+
             DiscordClient discordClient = new DiscordClient(new DiscordConfiguration()
             {
                 Token = Settings.botToken,
@@ -41,9 +46,14 @@ namespace RainbowPotato
                 Intents = DiscordIntents.All
             });
 
+            // Service collection configuration
+
             IServiceCollection services = new ServiceCollection();
             ConfigureServices(services);
             IServiceProvider serviceProvider = services.BuildServiceProvider();
+
+
+            // Commands configuration
 
             CommandsNextExtension commandsNextConfiguration = discordClient.UseCommandsNext(new CommandsNextConfiguration()
             {
@@ -54,11 +64,18 @@ namespace RainbowPotato
             commandsNextConfiguration.RegisterCommands<DevToolsModuleCommands>();
             commandsNextConfiguration.RegisterCommands<GuildInfoModuleCommands>();
 
+            // Slash commands configuration
+
             SlashCommandsExtension slashCommands = discordClient.UseSlashCommands(new SlashCommandsConfiguration(){
                 Services = serviceProvider
             });
 
             slashCommands.RegisterCommands<GuildInfoModuleSlash>();
+
+            // Add event handlers
+
+            Event.EventHandler eventHandler = new Event.EventHandler();
+            discordClient = eventHandler.AddEventHandlers(discordClient, services);
 
             await discordClient.ConnectAsync(new DiscordActivity("Ziemniak, a nawet batat", ActivityType.Playing));
             await Task.Delay(-1);
@@ -66,9 +83,18 @@ namespace RainbowPotato
 
         public static void ConfigureServices(IServiceCollection services)
         {
+            // Register GuildConfig repository
+
             services.AddSingleton<IDao<GuildConfigModel>, Dao<GuildConfigModel>>();
             services.AddSingleton<ICustomCache<GuildConfigModel>, CustomCache<GuildConfigModel>>();
             services.AddSingleton<IMongoRepository<GuildConfigModel>, MongoRepository<GuildConfigModel>>();
+
+            // Register ImgurAlbumTrigger repository
+
+            services.AddSingleton<ISimpleDao<ImgurAlbumTriggerModel>, SimpleDao<ImgurAlbumTriggerModel>>();
+            services.AddSingleton<ISimpleMongoRepository<ImgurAlbumTriggerModel>, SimpleMongoRepository<ImgurAlbumTriggerModel>>();
+
+            // Register commands logic classes
 
             services.AddSingleton<DevToolsModuleLogic>();
             services.AddSingleton<GuildInfoModuleLogic>();
